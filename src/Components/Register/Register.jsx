@@ -1,14 +1,66 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import logo from "../../assets/logo main.png";
+import useAuth from "../../Hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Register = () => {
+  const { createUser, updateUserProfile } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = async (data) => {
+    console.log(data);
+
+    const formData = new FormData();
+    formData.append("image", data.image[0]);
+    const res = await fetch(image_hosting_api, {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await res.json();
+    console.log(result);
+
+    if (result?.success) {
+      const photoURL = result.data.display_url;
+
+      // createUser after succesfully post pohto on imagebb
+      createUser(data.email, data.password)
+        .then((result) => {
+          console.log(result.user);
+          toast.success("Account created successfully!");
+
+          updateUserProfile(data.name, photoURL, data.phone)
+            .then(() => {
+              console.log("User Profile Updated");
+              reset();
+              toast.info("User Data Updated");
+              navigate("/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          // here code for save data in DB
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error(error.message);
+        });
+    } else {
+      toast.error("Something Went Wrong");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-10 text-black">
@@ -23,46 +75,37 @@ const Register = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           {/* Name */}
-          <div className="relative ">
+          <div className=" ">
+            <label htmlFor="name" className=" transition-all    px-3">
+              Name
+            </label>
             <input
               {...register("name", {
                 required: "Name is required",
                 maxLength: 20,
               })}
               placeholder=" "
-              className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
+              className=" w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
             />
-            <label
-              htmlFor="name"
-              className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3"
-            >
-              Name
-            </label>
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              <p className="text-red-500 mt-1">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="relative ">
-            <input
-              {...register("email", {
-                required: "Email is required",
-                maxLength: 20,
-              })}
-              placeholder=" "
-              className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
-            />
-            <label
-              htmlFor="email"
-              className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3"
-            >
+            <label className=" left-2 top-2 transition-all    px-3">
               Email
             </label>
+            <input
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+              })}
+              className=" w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
+            />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 mt-1">{errors.email.message}</p>
             )}
           </div>
 
@@ -85,6 +128,9 @@ const Register = () => {
 
           {/* Phone Number */}
           <div className="relative">
+            <label className=" left-2 top-2 transition-all    px-3">
+              Phone
+            </label>
             <input
               type="tel"
               {...register("phone", {
@@ -95,20 +141,18 @@ const Register = () => {
                 },
               })}
               placeholder=" "
-              className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-red-500"
+              className=" w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-red-500"
             />
-            <label className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3">
-              Phone
-            </label>
             {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.phone.message}
-              </p>
+              <p className="text-red-500 mt-1">{errors.phone.message}</p>
             )}
           </div>
 
           {/* Password */}
           <div className="relative">
+            <label className=" left-2 top-2 transition-all    px-3">
+              Password
+            </label>
             <input
               type="password"
               {...register("password", {
@@ -116,15 +160,10 @@ const Register = () => {
                 minLength: { value: 6, message: "Minimum 6 characters" },
               })}
               placeholder=" "
-              className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-red-500"
+              className=" w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-red-500"
             />
-            <label className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3">
-              Password
-            </label>
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 mt-1">{errors.password.message}</p>
             )}
           </div>
 

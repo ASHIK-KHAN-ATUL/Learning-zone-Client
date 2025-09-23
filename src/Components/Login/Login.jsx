@@ -1,13 +1,30 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import logo from "../../assets/logo main.png";
+import useAuth from "../../Hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    login(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        toast.success("Login successfully!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error(error.message);
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-10 text-black">
@@ -23,29 +40,26 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           {/* Email */}
           <div className="relative ">
-            <input
-              {...register("email", {
-                required: "Email is required",
-                maxLength: 20,
-              })}
-              placeholder=" "
-              className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
-            />
-            <label
-              htmlFor="email"
-              className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3"
-            >
+            <label className=" left-2 top-2 transition-all    px-3">
               Email
             </label>
+            <input
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+              })}
+              className=" w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0  focus:border-red-500"
+            />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 mt-1">{errors.email.message}</p>
             )}
           </div>
 
           {/* Password */}
           <div className="relative">
+            <label className=" left-2 top-2 transition-all  peer-focus:text-md   px-3">
+              Password
+            </label>
             <input
               type="password"
               {...register("password", {
@@ -55,13 +69,8 @@ const Login = () => {
               placeholder=" "
               className="peer w-full border-2 rounded-sm px-3 py-2 focus:outline-none focus:ring-0 focus:border-red-500"
             />
-            <label className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:-top-4 peer-placeholder-shown:text-base peer-focus:-top-6 peer-focus:-left-3 peer-focus:text-md peer-focus:text-red-500 bg-white px-3">
-              Password
-            </label>
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 mt-1">{errors.password.message}</p>
             )}
           </div>
 
