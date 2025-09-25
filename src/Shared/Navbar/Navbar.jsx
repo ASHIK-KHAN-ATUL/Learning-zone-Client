@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import logo from "../../assets/logo main.png";
@@ -29,7 +29,7 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
-      ,
+
       <li className="nav-link" key="about">
         <NavLink
           to="/about"
@@ -40,10 +40,10 @@ const Navbar = () => {
           About
         </NavLink>
       </li>
-      ,
+
       <li className="nav-link" key="services">
         <NavLink
-          to="/services"
+          to="/service"
           className={({ isActive }) =>
             isActive ? "text-red-500 font-bold" : ""
           }
@@ -51,7 +51,7 @@ const Navbar = () => {
           Services
         </NavLink>
       </li>
-      ,
+
       <li className="nav-link" key="contact">
         <NavLink
           to="/contact"
@@ -62,7 +62,7 @@ const Navbar = () => {
           Contact
         </NavLink>
       </li>
-      ,
+
       {user?.email ? (
         <li className="nav-link" key="logout">
           <NavLink onClick={handleLogout}>Logout</NavLink>
@@ -93,17 +93,17 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className=" px-5 py-1 border-y border-black">
+    <div className=" px-5 py-1 border-b border-black">
       <div className="flex justify-between items-center">
+        {/*  */}
         <img src={logo} className="w-14 h-14" alt="Learning-zone-logo" />
 
         <div className="hidden md:block">
           <ul className="flex gap-5  font-semibold">{navOption}</ul>
         </div>
 
-        <div></div>
-
-        <div className="flex gap-5">
+        {/* end */}
+        <div className="flex gap-5 items-center">
           {/* profile image */}
           {user?.email && (
             <div className="h-12 w-12 hover:animate-pulse cursor-pointer overflow-hidden rounded-full">

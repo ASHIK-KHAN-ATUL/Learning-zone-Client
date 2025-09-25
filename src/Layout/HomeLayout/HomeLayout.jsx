@@ -6,7 +6,7 @@ import Home from "../../Pages/Home/Home";
 
 const HomeLayout = () => {
   return (
-    <div className="bg-orange-50 text-sm sm:text-base">
+    <div className="bg-gradient-to-b from-yellow-100 to-white text-sm sm:text-lg text-black">
       <Helmet>
         <title>LearningZone || Learn, Explore, and Grow</title>
         <meta

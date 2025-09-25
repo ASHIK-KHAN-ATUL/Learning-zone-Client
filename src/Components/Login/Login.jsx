@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import logo from "../../assets/logo main.png";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SocialLogin from "../../Shared/SocialLogin/SocialLogin";
 const Login = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-10 text-black">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-xl">
+      <div className="bg-gradient-to-b from-yellow-100 to-white border p-8 rounded-2xl shadow-lg w-full max-w-xl">
         <div className="flex justify-between pb-10 relative">
           <img src={logo} className="h-20 absolute -top-5 -left-5" alt="" />
           <span></span>
@@ -76,6 +77,13 @@ const Login = () => {
 
           <input className="btn" type="submit" />
         </form>
+        <p className="text-center pt-5">
+          Don't have an account?{" "}
+          <Link className="text-green-600" to={"/register"}>
+            Register
+          </Link>
+        </p>
+        <SocialLogin></SocialLogin>
       </div>
     </div>
   );

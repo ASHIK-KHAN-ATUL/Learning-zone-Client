@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import logo from "../../assets/logo main.png";
 import useAuth from "../../Hooks/useAuth";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SocialLogin from "../../Shared/SocialLogin/SocialLogin";
+import userAxiosPublic from "../../Hooks/userAxiosPublic";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
+  const axiosPublic = userAxiosPublic();
   const navigate = useNavigate();
   const {
     register,
@@ -19,7 +22,7 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
 
     const formData = new FormData();
     formData.append("image", data.image[0]);
@@ -29,7 +32,7 @@ const Register = () => {
     });
 
     const result = await res.json();
-    console.log(result);
+    // console.log(result);
 
     if (result?.success) {
       const photoURL = result.data.display_url;
@@ -37,34 +40,52 @@ const Register = () => {
       // createUser after succesfully post pohto on imagebb
       createUser(data.email, data.password)
         .then((result) => {
-          console.log(result.user);
+          // console.log(result.user);
           toast.success("Account created successfully!");
 
-          updateUserProfile(data.name, photoURL, data.phone)
+          updateUserProfile(data.name, photoURL)
             .then(() => {
-              console.log("User Profile Updated");
-              reset();
-              toast.info("User Data Updated");
-              navigate("/");
+              // console.log("User Profile Updated");
+              toast.info("User Profile Updated");
             })
             .catch((error) => {
               console.log(error);
             });
 
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            photo: photoURL,
+            role: "user", // or "user" default role
+            status: "active",
+            createdAt: new Date(),
+          };
+
           // here code for save data in DB
+          axiosPublic.post("/users", userInfo).then((res) => {
+            console.log(res.data);
+            if (res.data.insertedId) {
+              toast.success("User Data Save in Database");
+            }
+          });
+
+          navigate("/");
+          reset();
         })
         .catch((error) => {
           console.error(error);
           toast.error(error.message);
         });
     } else {
-      toast.error("Something Went Wrong");
+      toast.error("Image upload failed!");
+      return;
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-10 text-black">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-xl">
+      <div className="bg-gradient-to-b from-yellow-100 to-white border p-8 rounded-2xl shadow-lg w-full max-w-xl">
         <div className="flex justify-between pb-10 relative">
           <img src={logo} className="h-20 absolute -top-5 -left-5" alt="" />
           <span></span>
@@ -169,6 +190,13 @@ const Register = () => {
 
           <input className="btn" type="submit" />
         </form>
+        <p className="text-center pt-5">
+          Have an account?{" "}
+          <Link className="text-green-600" to={"/login"}>
+            Login
+          </Link>
+        </p>
+        <SocialLogin></SocialLogin>
       </div>
     </div>
   );
