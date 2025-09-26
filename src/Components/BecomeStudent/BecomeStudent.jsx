@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import useAuth from "../../Hooks/useAuth";
-import userAxiosPublic from "../../Hooks/userAxiosPublic";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuth from "../../Hooks/useAuth";
+import userAxiosPublic from "../../Hooks/userAxiosPublic";
 
 const BecomeStudent = () => {
   const { user } = useAuth(); // expect { displayName, email, phoneNumber, ... }
@@ -31,6 +31,8 @@ const BecomeStudent = () => {
       guardianName: "",
       guardianPhone: "",
       agree: false,
+      status: "pending",
+      photo: user?.photoURL,
     },
     shouldUnregister: true, // <--- automatically removes unmounted fields
   });
@@ -56,6 +58,8 @@ const BecomeStudent = () => {
       admissionTest: data.admissionTest || "",
       guardianName: data.guardianName,
       guardianPhone: data.guardianPhone,
+      status: "pending",
+      photo: user?.photoURL,
       createdAt: new Date(),
       role: "student",
       createdBy: user?.email || "guest",
@@ -65,11 +69,11 @@ const BecomeStudent = () => {
     // change "/students" to "/users" if your backend expects that
 
     if (res?.data?.insertedId) {
-      toast.success("Student Apply registered successfully");
+      toast.success("Student application submitted successfully");
       reset();
       navigate("/"); // or wherever you want
     } else if (res?.data?.message === "exists") {
-      toast.info("You are already registered as a student");
+      toast.info("You are already apply as a student");
       navigate("/");
     } else {
       toast.error("Failed to save student. Try again.");
@@ -77,7 +81,7 @@ const BecomeStudent = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4 bg-gradient-to-b from-yellow-100 to-yellow-50">
+    <div className="max-w-3xl mx-auto py-12 px-4 bg-gradient-to-b from-blue-100 to-blue-50">
       <h2 className="text-2xl font-bold mb-4 text-center">
         Student Registration
       </h2>

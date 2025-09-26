@@ -41,7 +41,7 @@ const JoinAsTeacherOrStudent = () => {
                 Create classes, manage students, and share your knowledge.
               </p>
               <div className="card-actions">
-                <Link to="/teacher-apply" className="btn btn-primary">
+                <Link to="/become-teacher" className="btn btn-primary">
                   Become a Teacher
                 </Link>
               </div>

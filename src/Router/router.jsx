@@ -8,6 +8,10 @@ import PrivetRoutes from "../Routes/PrivetRoutes";
 import Service from "../Pages/Service/Service";
 import Contact from "../Pages/Contact/Contact";
 import BecomeStudent from "../Components/BecomeStudent/BecomeStudent";
+import BecomeTeacher from "../Components/BecomeTeacher/BecomeTeacher";
+import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
+import AppliedTeacher from "../Pages/DashboardPages/AdminDashPage/AppliedTeacher/AppliedTeacher";
+import Profile from "../Pages/DashboardPages/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +44,38 @@ const router = createBrowserRouter([
       },
       {
         path: "/become-student",
-        element: <BecomeStudent></BecomeStudent>,
+        element: (
+          <PrivetRoutes>
+            <BecomeStudent></BecomeStudent>
+          </PrivetRoutes>
+        ),
+      },
+      {
+        path: "/become-teacher",
+        element: (
+          <PrivetRoutes>
+            <BecomeTeacher></BecomeTeacher>
+          </PrivetRoutes>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivetRoutes>
+        <DashboardLayout></DashboardLayout>
+      </PrivetRoutes>
+    ),
+    children: [
+      {
+        path: "", // default when /dashboard hit hoy
+        element: <Profile></Profile>,
+      },
+
+      {
+        path: "applied-teacher-admin",
+        element: <AppliedTeacher></AppliedTeacher>,
       },
     ],
   },
