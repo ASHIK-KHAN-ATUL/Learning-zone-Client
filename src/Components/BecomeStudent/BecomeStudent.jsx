@@ -58,11 +58,12 @@ const BecomeStudent = () => {
       admissionTest: data.admissionTest || "",
       guardianName: data.guardianName,
       guardianPhone: data.guardianPhone,
-      status: "pending",
+      status: "active", // account active/unactive
+      requestStatus: "pending", // application pending/accepted/rejected
       photo: user?.photoURL,
       createdAt: new Date(),
       role: "student",
-      createdBy: user?.email || "guest",
+      createdBy: user?.email,
     };
 
     const res = await axiosPublic.post("/student-apply", studentPayload);

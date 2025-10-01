@@ -52,11 +52,13 @@ const BecomeTeacher = () => {
       facebook: data.facebook || "",
       website: data.website || "",
       bio: data.bio || "",
-      status: "pending",
+      // ✅ Better way:
+      status: "active", // for account active/unactive
+      requestStatus: "pending", // for application pending/accepted/rejected
       photo: user?.photoURL,
       createdAt: new Date(),
       role: "teacher",
-      createdBy: user?.email || "guest",
+      createdBy: user?.email,
     };
 
     const res = await axiosPublic.post("/teacher-apply", teacherPayload);

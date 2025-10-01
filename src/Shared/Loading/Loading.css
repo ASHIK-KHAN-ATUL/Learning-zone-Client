@@ -1,0 +1,4 @@
+.mask-exclude {
+  -webkit-mask: radial-gradient(#fff 70%, transparent 72%);
+  mask: radial-gradient(#fff 70%, transparent 72%);
+}
