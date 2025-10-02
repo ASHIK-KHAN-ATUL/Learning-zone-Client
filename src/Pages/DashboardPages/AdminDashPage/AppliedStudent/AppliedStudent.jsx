@@ -1,129 +1,39 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FaEye, FaCheck, FaTimes } from "react-icons/fa";
 import Loading from "../../../../Shared/Loading/Loading";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
-import userAxiosPublic from "../../../../Hooks/userAxiosPublic";
+import { FaEye } from "react-icons/fa";
 import { MdOutlineManageSearch } from "react-icons/md";
-import useAuth from "../../../../Hooks/useAuth";
-import DataLoading from "../../../../Shared/DataLoading/DataLoading";
-import Swal from "sweetalert2";
 
-const AppliedTeacher = () => {
+const AppliedStudent = () => {
   const axiosSecure = useAxiosSecure();
-  const axiosPublic = userAxiosPublic();
-  const { user } = useAuth();
 
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1); // page state
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
-  const limit = 10; // per page 10
+  const [page, setPage] = useState(1);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const limit = 10;
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["appliedTeachers", query, page],
-    enabled: !!user?.email,
+  const { data, isLoading } = useQuery({
+    queryKey: ["appliedStudents", query, page],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/teacher-apply-admin?search=${query}&page=${page}&limit=${limit}`
+        `/student-apply-admin?search=${query}&page=${page}&limit=${limit}`
       );
       return res.data;
     },
     keepPreviousData: true,
   });
-  // console.log(data);
 
-  if (isLoading) return <DataLoading></DataLoading>;
+  if (isLoading) return <Loading />;
 
-  const {
-    data: teachers = [],
-    totalPages,
-    currentPage,
-    pendingCount,
-  } = data || {};
-
-  const handleAccept = async (teacher) => {
-    // console.log(teacher);
-
-    const result = await Swal.fire({
-      title: `Accept ${teacher.fullName}?`,
-      text: "This teacher will be approved for your platform.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, accept!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const res = await axiosSecure.patch(
-          `/teacher-apply/update/${teacher._id}`,
-          {
-            requestStatus: "accepted",
-          }
-        );
-
-        if (res.data.success && res.data.modifiedCount) {
-          Swal.fire(
-            "Accepted!",
-            `${teacher.fullName} has been approved.`,
-            "success"
-          );
-        } else {
-          Swal.fire("Oops!", "Failed to update teacher status.", "error");
-        }
-        refetch();
-      } catch (error) {
-        console.error(error);
-        Swal.fire("Error!", "Something went wrong.", "error");
-      }
-    }
-  };
-
-  const handleReject = async (teacher) => {
-    const result = await Swal.fire({
-      title: `Reject ${teacher.fullName}?`,
-      text: "This teacher's request will be rejected.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, reject!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const res = await axiosSecure.patch(
-          `/teacher-apply/update/${teacher._id}`,
-          { requestStatus: "rejected" }
-        );
-        console.log(res);
-
-        if (res.data.success && res.data.modifiedCount) {
-          Swal.fire(
-            "Rejected!",
-            `${teacher.fullName} has been rejected.`,
-            "success"
-          );
-        }
-
-        refetch();
-      } catch (error) {
-        Swal.fire("Error!", "Something went wrong.", "error");
-      }
-    }
-  };
-
+  const { data: students = [], totalPages, currentPage } = data || {};
   return (
     <div className="p-6">
-      {/* Main Card */}
       <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
         {/* Header + Search */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Applied Teachers : {pendingCount}
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Applied Students</h1>
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -158,14 +68,15 @@ const AppliedTeacher = () => {
                 <th className="px-4 py-2 rounded-tl-md">#</th>
                 <th className="px-4 py-2">Name</th>
                 <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Program</th>
                 <th className="px-4 py-2">Status</th>
                 <th className="px-4 py-2 text-center rounded-tr-md">Actions</th>
               </tr>
             </thead>
             <tbody className="text-lg">
-              {teachers.map((teacher, idx) => (
+              {students.map((student, idx) => (
                 <tr
-                  key={teacher._id}
+                  key={student._id}
                   className={`${
                     idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                   } hover:bg-gray-100`}
@@ -173,39 +84,28 @@ const AppliedTeacher = () => {
                   <td className="px-4 py-2">
                     {(currentPage - 1) * limit + idx + 1}
                   </td>
-                  <td className="px-4 py-2">{teacher.fullName}</td>
-                  <td className="px-4 py-2">{teacher.email}</td>
+                  <td className="px-4 py-2">{student.fullName}</td>
+                  <td className="px-4 py-2">{student.email}</td>
+                  <td className="px-4 py-2">{student.program}</td>
                   <td className="px-4 py-2">
                     <span
                       className={`px-2 py-1 text-xs rounded-full ${
-                        teacher.requestStatus === "pending"
+                        student.requestStatus === "pending"
                           ? "bg-yellow-100 text-yellow-800"
-                          : teacher.requestStatus === "accepted"
+                          : student.requestStatus === "accepted"
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {teacher.requestStatus}
+                      {student.requestStatus}
                     </span>
                   </td>
                   <td className="px-4 py-2 flex justify-center gap-2">
                     <button
                       className="btn btn-xs btn-outline btn-info"
-                      onClick={() => setSelectedTeacher(teacher)}
+                      onClick={() => setSelectedStudent(student)}
                     >
                       <FaEye />
-                    </button>
-                    <button
-                      onClick={() => handleAccept(teacher)}
-                      className="btn btn-xs btn-outline btn-success"
-                    >
-                      <FaCheck />
-                    </button>
-                    <button
-                      onClick={() => handleReject(teacher)}
-                      className="btn btn-xs btn-outline btn-error"
-                    >
-                      <FaTimes />
                     </button>
                   </td>
                 </tr>
@@ -247,55 +147,83 @@ const AppliedTeacher = () => {
       </div>
 
       {/* Modal */}
-      {selectedTeacher && (
+      {selectedStudent && (
         <div className="modal modal-open">
           <div className="modal-box max-w-2xl bg-white text-gray-800 rounded-xl shadow-lg">
             <h2 className="text-xl font-semibold mb-4 border-b pb-2">
-              Teacher Details
+              Student Details
             </h2>
             <div className="flex items-center gap-4 mb-6">
               <img
-                src={selectedTeacher?.photo}
-                alt={selectedTeacher?.fullName}
+                src={selectedStudent?.photo}
+                alt={selectedStudent?.fullName}
                 className="w-24 h-24 rounded-full border shadow"
               />
               <div>
-                <p className="font-bold">{selectedTeacher?.fullName}</p>
+                <p className="font-bold">{selectedStudent?.fullName}</p>
                 <p className="text-sm text-gray-600">
-                  {selectedTeacher?.email}
+                  {selectedStudent?.email}
                 </p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <p>
-                <span className="font-semibold">Status:</span>{" "}
-                {selectedTeacher?.status}
+                <span className="font-semibold">Phone:</span>{" "}
+                {selectedStudent?.phone}
               </p>
               <p>
-                <span className="font-semibold">Experience:</span>{" "}
-                {selectedTeacher?.experience} years
+                <span className="font-semibold">Age:</span>{" "}
+                {selectedStudent?.age || "-"}
               </p>
-              <p className="col-span-2">
-                <span className="font-semibold">Bio:</span>{" "}
-                {selectedTeacher?.bio}
+              <p>
+                <span className="font-semibold">Grade:</span>{" "}
+                {selectedStudent?.grade}
+              </p>
+              <p>
+                <span className="font-semibold">School:</span>{" "}
+                {selectedStudent?.schoolName}
+              </p>
+              <p>
+                <span className="font-semibold">Program:</span>{" "}
+                {selectedStudent?.program}
               </p>
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                {selectedTeacher?.subjects?.join(", ")}
+                {selectedStudent?.subjects?.join(", ")}
               </p>
               <p>
-                <span className="font-semibold">Available Days:</span>{" "}
-                {selectedTeacher?.availableDays?.join(", ")}
+                <span className="font-semibold">Board:</span>{" "}
+                {selectedStudent?.board}
               </p>
               <p>
-                <span className="font-semibold">Available Times:</span>{" "}
-                {selectedTeacher?.availableTimes?.join(", ")}
+                <span className="font-semibold">Target Year:</span>{" "}
+                {selectedStudent?.targetYear}
+              </p>
+              <p>
+                <span className="font-semibold">Group:</span>{" "}
+                {selectedStudent?.group}
+              </p>
+              <p>
+                <span className="font-semibold">Admission Test:</span>{" "}
+                {selectedStudent?.admissionTest}
+              </p>
+              <p>
+                <span className="font-semibold">Guardian Name:</span>{" "}
+                {selectedStudent?.guardianName}
+              </p>
+              <p>
+                <span className="font-semibold">Guardian Phone:</span>{" "}
+                {selectedStudent?.guardianPhone}
+              </p>
+              <p className="col-span-2">
+                <span className="font-semibold">Address:</span>{" "}
+                {selectedStudent?.address}
               </p>
             </div>
             <div className="mt-6 flex justify-end">
               <button
                 className="btn btn-sm btn-error"
-                onClick={() => setSelectedTeacher(null)}
+                onClick={() => setSelectedStudent(null)}
               >
                 Close
               </button>
@@ -303,7 +231,7 @@ const AppliedTeacher = () => {
           </div>
           <div
             className="modal-backdrop"
-            onClick={() => setSelectedTeacher(null)}
+            onClick={() => setSelectedStudent(null)}
           />
         </div>
       )}
@@ -311,4 +239,4 @@ const AppliedTeacher = () => {
   );
 };
 
-export default AppliedTeacher;
+export default AppliedStudent;

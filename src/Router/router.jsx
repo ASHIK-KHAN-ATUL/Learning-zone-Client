@@ -12,6 +12,7 @@ import BecomeTeacher from "../Components/BecomeTeacher/BecomeTeacher";
 import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import AppliedTeacher from "../Pages/DashboardPages/AdminDashPage/AppliedTeacher/AppliedTeacher";
 import Profile from "../Pages/DashboardPages/Profile/Profile";
+import AppliedStudent from "../Pages/DashboardPages/AdminDashPage/AppliedStudent/AppliedStudent";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: "applied-teacher-admin",
         element: <AppliedTeacher></AppliedTeacher>,
+      },
+      {
+        path: "applied-student-admin",
+        element: <AppliedStudent></AppliedStudent>,
       },
     ],
   },

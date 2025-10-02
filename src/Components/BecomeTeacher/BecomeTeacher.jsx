@@ -38,6 +38,7 @@ const BecomeTeacher = () => {
     // console.log(data);
     const teacherPayload = {
       fullName: user?.displayName || data.fullName,
+      userId: user?._id,
       email: user?.email || data.email,
       phone: data.phone,
       address: data.address || "",
@@ -57,17 +58,18 @@ const BecomeTeacher = () => {
       requestStatus: "pending", // for application pending/accepted/rejected
       photo: user?.photoURL,
       createdAt: new Date(),
-      role: "teacher",
       createdBy: user?.email,
     };
 
     const res = await axiosPublic.post("/teacher-apply", teacherPayload);
 
+    console.log(res);
+
     if (res?.data?.insertedId) {
       toast.success("Teacher application submitted successfully");
       reset();
       navigate("/");
-    } else if (res?.data?.message === "exists") {
+    } else if (res?.data?.message === "already_exists") {
       toast.info("You are already Apply as a teacher");
       navigate("/");
     } else {

@@ -30,6 +30,10 @@ const DashboardLayout = () => {
           <Link to="/dashboard/applied-teacher-admin">Applied Teacher</Link>
           {/* Add more links here */}
         </nav>
+        <nav className="flex flex-col gap-3">
+          <Link to="/dashboard/applied-student-admin">Applied Student</Link>
+          {/* Add more links here */}
+        </nav>
       </aside>
 
       {/* Backdrop */}

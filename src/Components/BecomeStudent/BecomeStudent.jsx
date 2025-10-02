@@ -44,6 +44,7 @@ const BecomeStudent = () => {
     console.log(data);
     const studentPayload = {
       fullName: data.fullName,
+      userId: user?._id,
       email: data.email,
       phone: data.phone,
       age: data.age || null,
@@ -62,7 +63,6 @@ const BecomeStudent = () => {
       requestStatus: "pending", // application pending/accepted/rejected
       photo: user?.photoURL,
       createdAt: new Date(),
-      role: "student",
       createdBy: user?.email,
     };
 
