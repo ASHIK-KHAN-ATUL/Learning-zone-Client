@@ -5,16 +5,17 @@ import logo from "../../assets/logo main.png";
 import "./Navbar.css";
 import { NavLink, useLocation } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import useUserRole from "../../Hooks/useUserRole";
 
 const Navbar = () => {
   const [isClick, setIsClick] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const { role } = useUserRole();
 
   const handleLogout = () => {
-    logout()
-      .then(() => {})
-      .catch((error) => console.error(error));
+    logout().then(() => {});
+    // .catch((error) => console.error(error));
   };
 
   const navOption = (
@@ -23,7 +24,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            isActive ? "text-red-500 font-bold" : ""
+            isActive ? "text-sky-500 font-bold" : ""
           }
         >
           Home
@@ -34,7 +35,7 @@ const Navbar = () => {
         <NavLink
           to="/about"
           className={({ isActive }) =>
-            isActive ? "text-red-500 font-bold" : ""
+            isActive ? "text-sky-500 font-bold" : ""
           }
         >
           About
@@ -45,7 +46,7 @@ const Navbar = () => {
         <NavLink
           to="/service"
           className={({ isActive }) =>
-            isActive ? "text-red-500 font-bold" : ""
+            isActive ? "text-sky-500 font-bold" : ""
           }
         >
           Services
@@ -56,12 +57,25 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={({ isActive }) =>
-            isActive ? "text-red-500 font-bold" : ""
+            isActive ? "text-sky-500 font-bold" : ""
           }
         >
           Contact
         </NavLink>
       </li>
+
+      {role && (
+        <li className="nav-link" key="dashboard">
+          <NavLink
+            to="/dashboard/profile"
+            className={({ isActive }) =>
+              isActive ? "text-sky-500 font-bold" : ""
+            }
+          >
+            Dashboard
+          </NavLink>
+        </li>
+      )}
 
       {user?.email ? (
         <li className="nav-link" key="logout">
@@ -72,7 +86,7 @@ const Navbar = () => {
           <NavLink
             to="/register"
             className={({ isActive }) =>
-              isActive ? "text-red-500 font-bold" : ""
+              isActive ? "text-sky-500 font-bold" : ""
             }
           >
             Register
@@ -83,7 +97,7 @@ const Navbar = () => {
           <NavLink
             to="/login"
             className={({ isActive }) =>
-              isActive ? "text-red-500 font-bold" : ""
+              isActive ? "text-sky-500 font-bold" : ""
             }
           >
             Login
@@ -96,10 +110,11 @@ const Navbar = () => {
     <div className=" px-5 py-1 border-b border-black">
       <div className="flex justify-between items-center">
         {/*  */}
-        <img src={logo} className="w-14 h-14" alt="Learning-zone-logo" />
+        {/* <img src={logo} className="w-14 h-14" alt="Learning-zone-logo" /> */}
+        <p className="text-xl font-bold text-sky-100">Learning Zone</p>
 
-        <div className="hidden md:block">
-          <ul className="flex gap-5  font-semibold">{navOption}</ul>
+        <div className="hidden lg:block">
+          <ul className="flex gap-5  font-semibold text-[16px]">{navOption}</ul>
         </div>
 
         {/* end */}
@@ -116,24 +131,24 @@ const Navbar = () => {
           )}
 
           {/* 3line Btn */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <span
               onClick={() => setIsClick(!isClick)}
-              className=" relative btn w-10 h-8  bg-transparent z-10 border"
+              className=" relative btn w-10 h-8  bg-transparent z-10 border border-white"
             >
               {isClick ? (
-                <span className="transition-all duration-300 ease-in-out transform rotate-180 scale-110 text-sky-400 bg-transparent">
+                <span className="transition-all duration-300 ease-in-out transform rotate-180 scale-110 text-sky-400  ">
                   <RxCross2 />
                 </span>
               ) : (
-                <span className="transition-all duration-300 ease-in-out transform rotate-0 scale-110 text-sky-400">
+                <span className="transition-all duration-300 ease-in-out transform rotate-0 scale-110 text-sky-400 ">
                   <FaBars />
                 </span>
               )}
               <div
                 className={` ${
                   isClick ? "block" : "hidden"
-                } absolute top-8 -right-0 w-60   p-5 rounded-lg overflow-hidden bg-green-100 border border-black`}
+                } absolute top-8 -right-0 w-60   p-5 rounded-lg overflow-hidden bg-black/40 backdrop-blur-sm border border-white`}
               >
                 <ul className=" flex flex-col  w-[60vh] text-start ">
                   {navOption}

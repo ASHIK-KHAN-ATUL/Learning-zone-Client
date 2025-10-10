@@ -13,6 +13,15 @@ import DashboardLayout from "../Layout/DashboardLayout/DashboardLayout";
 import AppliedTeacher from "../Pages/DashboardPages/AdminDashPage/AppliedTeacher/AppliedTeacher";
 import Profile from "../Pages/DashboardPages/Profile/Profile";
 import AppliedStudent from "../Pages/DashboardPages/AdminDashPage/AppliedStudent/AppliedStudent";
+import AllTeacher from "../Pages/DashboardPages/AdminDashPage/AllTeacher/AllTeacher";
+import Forbidden from "../Shared/Forbidden/Forbidden";
+import AdminRoutes from "../Routes/AdminRoutes";
+import AllStudent from "../Pages/DashboardPages/AdminDashPage/AllStudent/AllStudent";
+import TeacherRoutes from "../Routes/TeacherRoutes";
+import RoutineManager from "../Pages/DashboardPages/Shared/Routine/RoutineManager";
+import ShowRoutine from "../Pages/DashboardPages/Shared/Routine/ShowRoutine";
+import StudentRoutes from "../Routes/StudentRoutes";
+import StudentRoutine from "../Pages/DashboardPages/Shared/Routine/StudentRoutine";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +53,10 @@ const router = createBrowserRouter([
         element: <Contact></Contact>,
       },
       {
+        path: "/forbidden",
+        element: <Forbidden></Forbidden>,
+      },
+      {
         path: "/become-student",
         element: (
           <PrivetRoutes>
@@ -70,17 +83,102 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "", // default when /dashboard hit hoy
+        path: "profile",
         element: <Profile></Profile>,
+      },
+      {
+        path: "all-teacher-admin",
+        element: (
+          <AdminRoutes>
+            <AllTeacher></AllTeacher>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "all-student-admin",
+        element: (
+          <AdminRoutes>
+            <AllStudent></AllStudent>
+          </AdminRoutes>
+        ),
       },
 
       {
         path: "applied-teacher-admin",
-        element: <AppliedTeacher></AppliedTeacher>,
+        element: (
+          <AdminRoutes>
+            <AppliedTeacher></AppliedTeacher>
+          </AdminRoutes>
+        ),
       },
       {
         path: "applied-student-admin",
-        element: <AppliedStudent></AppliedStudent>,
+        element: (
+          <AdminRoutes>
+            <AppliedStudent></AppliedStudent>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "routineManager-admin",
+        element: (
+          <AdminRoutes>
+            <RoutineManager></RoutineManager>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "showRoutine-admin",
+        element: (
+          <AdminRoutes>
+            <ShowRoutine></ShowRoutine>
+          </AdminRoutes>
+        ),
+      },
+
+      // for teacher
+
+      {
+        path: "all-student-teacher",
+        element: (
+          <TeacherRoutes>
+            <AllStudent></AllStudent>
+          </TeacherRoutes>
+        ),
+      },
+      {
+        path: "applied-student-teacher",
+        element: (
+          <TeacherRoutes>
+            <AppliedStudent></AppliedStudent>
+          </TeacherRoutes>
+        ),
+      },
+      {
+        path: "routineManager-teacher",
+        element: (
+          <TeacherRoutes>
+            <RoutineManager></RoutineManager>
+          </TeacherRoutes>
+        ),
+      },
+      {
+        path: "showRoutine-teacher",
+        element: (
+          <TeacherRoutes>
+            <ShowRoutine></ShowRoutine>
+          </TeacherRoutes>
+        ),
+      },
+
+      // for student
+      {
+        path: "showRoutine-student",
+        element: (
+          <StudentRoutes>
+            <StudentRoutine></StudentRoutine>
+          </StudentRoutes>
+        ),
       },
     ],
   },

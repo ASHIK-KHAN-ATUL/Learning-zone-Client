@@ -41,7 +41,7 @@ const BecomeStudent = () => {
   const selectedGrade = watch("grade");
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     const studentPayload = {
       fullName: data.fullName,
       userId: user?._id,
@@ -101,7 +101,6 @@ const BecomeStudent = () => {
             {...register("fullName", { required: "Full name is required" })}
             className="input w-full bg-white/60 border rounded-sm border-black"
             placeholder="Your full name"
-            readOnly
             defaultValue={user?.displayName || ""}
           />
           {errors.fullName && (
@@ -248,12 +247,12 @@ const BecomeStudent = () => {
           </div>
         </div>
 
-        {/* Conditional: Regular (subjects) */}
-        {program === "regular" && (
+        {/* Conditional: Regular (6-8) */}
+        {program === "regular" && Number(selectedGrade) <= 8 && (
           <div className="py-5">
             <label className="label">
               <span className="text-black">
-                Select Subjects (for Regular classes)
+                Select Subjects (for Regular classes 6-8)
               </span>
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -273,9 +272,60 @@ const BecomeStudent = () => {
           </div>
         )}
 
+        {/* Conditional: Regular (9-10) like SSC */}
+        {program === "regular" && Number(selectedGrade) >= 9 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+            <div>
+              <label className="label">
+                <span className="text-black">Board Name</span>
+              </label>
+              <select
+                {...register("board", { required: "Board is required" })}
+                className="select select-bordered w-full bg-white border rounded-sm border-black"
+              >
+                <option value="">Select board</option>
+                <option value="Dhaka">Dhaka</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Chittagong">Chittagong</option>
+                <option value="Comilla">Comilla</option>
+                <option value="Jessore">Jessore</option>
+                <option value="Sylhet">Sylhet</option>
+                <option value="Barisal">Barisal</option>
+                <option value="Dinajpur">Dinajpur</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="label">
+                <span className="text-black">Target Year</span>
+              </label>
+              <input
+                {...register("targetYear", {
+                  required: "Target year is required",
+                })}
+                className="input w-full bg-white/60 border rounded-sm border-black"
+                placeholder="2026"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Conditional: SSC */}
         {program === "ssc" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+            <div>
+              <label className="label">
+                <span className="text-black">Group</span>
+              </label>
+              <select
+                {...register("group", { required: true })}
+                className="select select-bordered w-full bg-white border rounded-sm border-black"
+              >
+                <option value="science">Science</option>
+                <option value="commerce">Commerce</option>
+                <option value="arts">Arts</option>
+              </select>
+            </div>
             <div>
               <label className="label">
                 <span className="text-black">Board Name</span>

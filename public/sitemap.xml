@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+  <!-- Home Page -->
+  <url>
+    <loc>https://learningzone.netlify.app/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://learningzone.netlify.app/about</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Service -->
+  <url>
+    <loc>https://learningzone.netlify.app/service</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://learningzone.netlify.app/contact</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Register -->
+  <url>
+    <loc>https://learningzone.netlify.app/register</loc>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- Login -->
+  <url>
+    <loc>https://learningzone.netlify.app/login</loc>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- Become Student -->
+  <url>
+    <loc>https://learningzone.netlify.app/become-student</loc>
+    <priority>0.65</priority>
+  </url>
+
+  <!-- Become Teacher -->
+  <url>
+    <loc>https://learningzone.netlify.app/become-teacher</loc>
+    <priority>0.65</priority>
+  </url>
+</urlset>

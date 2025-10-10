@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://learningzone.netlify.app/sitemap.xml

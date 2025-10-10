@@ -63,7 +63,7 @@ const BecomeTeacher = () => {
 
     const res = await axiosPublic.post("/teacher-apply", teacherPayload);
 
-    console.log(res);
+    // console.log(res);
 
     if (res?.data?.insertedId) {
       toast.success("Teacher application submitted successfully");
@@ -93,7 +93,6 @@ const BecomeTeacher = () => {
             <span className="text-black">Full Name</span>
           </label>
           <input
-            readOnly
             defaultValue={user?.displayName || ""}
             {...register("fullName")}
             className="input w-full bg-white/60 border rounded-sm border-black"

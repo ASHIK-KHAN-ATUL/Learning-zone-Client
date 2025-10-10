@@ -20,6 +20,16 @@ const AppliedTeacher = () => {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const limit = 10; // per page 10
 
+  const { data: mainUser } = useQuery({
+    queryKey: ["mainUser", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosPublic(`/users/user/${user?.email}`);
+      return res.data;
+    },
+  });
+  // console.log("MainUser", mainUser);
+
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["appliedTeachers", query, page],
     enabled: !!user?.email,
@@ -42,9 +52,19 @@ const AppliedTeacher = () => {
     pendingCount,
   } = data || {};
 
-  const handleAccept = async (teacher) => {
-    // console.log(teacher);
+  if (!teachers?.length) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-500">
+        <MdOutlineManageSearch className="text-6xl mb-4 text-gray-400" />
+        <p className="text-lg font-semibold">No teacher applications found</p>
+        <p className="text-sm text-gray-400">
+          Try adjusting filters or check again later
+        </p>
+      </div>
+    );
+  }
 
+  const handleAccept = async (teacher) => {
     const result = await Swal.fire({
       title: `Accept ${teacher.fullName}?`,
       text: "This teacher will be approved for your platform.",
@@ -61,6 +81,7 @@ const AppliedTeacher = () => {
           `/teacher-apply/update/${teacher._id}`,
           {
             requestStatus: "accepted",
+            adminData: mainUser, // add here
           }
         );
 
@@ -75,7 +96,7 @@ const AppliedTeacher = () => {
         }
         refetch();
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         Swal.fire("Error!", "Something went wrong.", "error");
       }
     }
@@ -96,9 +117,11 @@ const AppliedTeacher = () => {
       try {
         const res = await axiosSecure.patch(
           `/teacher-apply/update/${teacher._id}`,
-          { requestStatus: "rejected" }
+          {
+            requestStatus: "rejected",
+            adminData: mainUser, // add here too
+          }
         );
-        console.log(res);
 
         if (res.data.success && res.data.modifiedCount) {
           Swal.fire(
@@ -116,9 +139,9 @@ const AppliedTeacher = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="md:p-6 ">
       {/* Main Card */}
-      <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+      <div className="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 shadow-lg rounded-xl p-6 border border-gray-200">
         {/* Header + Search */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-4">
           <h1 className="text-2xl font-bold text-gray-800">
@@ -128,7 +151,7 @@ const AppliedTeacher = () => {
             <input
               type="text"
               placeholder="Search by Name or Email"
-              className="input input-bordered w-full md:w-64 bg-transparent border border-black"
+              className="input input-bordered focus:outline-none focus:ring-0 w-full md:w-64 bg-transparent border border-black"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => {
@@ -151,9 +174,9 @@ const AppliedTeacher = () => {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto max-h-[60vh]">
+        <div className="overflow-x-auto max-h-[60vh] ">
           <table className="w-full text-left border-collapse text-gray-800">
-            <thead className="bg-gray-200 text-gray-700 text-sm">
+            <thead className="bg-black text-white text-sm">
               <tr>
                 <th className="px-4 py-2 rounded-tl-md">#</th>
                 <th className="px-4 py-2">Name</th>
@@ -162,13 +185,13 @@ const AppliedTeacher = () => {
                 <th className="px-4 py-2 text-center rounded-tr-md">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-lg">
+            <tbody className="text-sm sm:text-base border">
               {teachers.map((teacher, idx) => (
                 <tr
                   key={teacher._id}
                   className={`${
-                    idx % 2 === 0 ? "bg-gray-50" : "bg-white"
-                  } hover:bg-gray-100`}
+                    idx % 2 === 0 ? "bg-white/40" : ""
+                  }  duration-300`}
                 >
                   <td className="px-4 py-2">
                     {(currentPage - 1) * limit + idx + 1}
@@ -188,7 +211,7 @@ const AppliedTeacher = () => {
                       {teacher.requestStatus}
                     </span>
                   </td>
-                  <td className="px-4 py-2 flex justify-center gap-2">
+                  <td className="px-4 py-2 flex items-center justify-center gap-2 ">
                     <button
                       className="btn btn-xs btn-outline btn-info"
                       onClick={() => setSelectedTeacher(teacher)}

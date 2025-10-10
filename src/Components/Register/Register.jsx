@@ -49,7 +49,7 @@ const Register = () => {
               toast.info("User Profile Updated");
             })
             .catch((error) => {
-              console.log(error);
+              // console.log(error);
             });
 
           const userInfo = {
@@ -64,7 +64,7 @@ const Register = () => {
 
           // here code for save data in DB
           axiosPublic.post("/users", userInfo).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.insertedId) {
               toast.success("User Data Save in Database");
             }

@@ -2,22 +2,21 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
 import Navbar from "../../Shared/Navbar/Navbar";
-import Home from "../../Pages/Home/Home";
+import Footer from "../../Shared/Footer/Footer";
+import IfYouAreBlocked from "../../Components/IfYouAreBlocked/IfYouAreBlocked";
+import "./Homelayout.css";
+import useAuth from "../../Hooks/useAuth";
 
 const HomeLayout = () => {
+  const { user } = useAuth();
   return (
-    <div className="bg-gradient-to-b from-yellow-100 to-white text-sm sm:text-lg text-black">
-      <Helmet>
-        <title>LearningZone || Learn, Explore, and Grow</title>
-        <meta
-          name="description"
-          content="LearningZone is your platform to access tutorials, courses, and resources to enhance your skills and knowledge."
-        />
-        <link rel="canonical" href="https://learningzone.netlify.app/" />
-      </Helmet>
-      <div className="font-medium min-h-screen max-w-7xl mx-auto ">
-        <Navbar></Navbar>
-        <Outlet></Outlet>
+    <div className="relative min-h-screen overflow-hidden bg-black text-gray-100">
+      {/* 🔹 Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto font-medium">
+        <Navbar />
+        {user?.email && <IfYouAreBlocked />}
+        <Outlet />
+        <Footer />
       </div>
     </div>
   );

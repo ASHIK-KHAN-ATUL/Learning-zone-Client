@@ -2,6 +2,7 @@ import React from "react";
 import useAuth from "../../Hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import userAxiosPublic from "../../Hooks/userAxiosPublic";
+import { toast } from "react-toastify";
 
 const SocialLogin = () => {
   const { signInWithGoogle } = useAuth();
@@ -25,7 +26,7 @@ const SocialLogin = () => {
         };
 
         axiosPublic.post("/users", userInfo).then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.insertedId) {
             toast.success("User Data Save in Database");
           }
@@ -34,7 +35,7 @@ const SocialLogin = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
       });
   };
 
