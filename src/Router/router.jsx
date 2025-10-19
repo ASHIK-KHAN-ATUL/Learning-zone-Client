@@ -22,6 +22,7 @@ import RoutineManager from "../Pages/DashboardPages/Shared/Routine/RoutineManage
 import ShowRoutine from "../Pages/DashboardPages/Shared/Routine/ShowRoutine";
 import StudentRoutes from "../Routes/StudentRoutes";
 import StudentRoutine from "../Pages/DashboardPages/Shared/Routine/StudentRoutine";
+import SeeMessage from "../Pages/DashboardPages/Shared/SeeMessage/SeeMessage";
 
 const router = createBrowserRouter([
   {
@@ -132,6 +133,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoutes>
             <ShowRoutine></ShowRoutine>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "seeMessage-admin",
+        element: (
+          <AdminRoutes>
+            <SeeMessage></SeeMessage>
           </AdminRoutes>
         ),
       },

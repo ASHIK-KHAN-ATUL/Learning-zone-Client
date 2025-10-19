@@ -1,13 +1,58 @@
-import Lottie from "lottie-react";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
+import Swal from "sweetalert2";
+import axios from "axios";
+import Lottie from "lottie-react";
 import contactAnimation from "../../assets/Support.json";
 import ceoPic from "../../assets/pic of team/antu.jpg";
 import coFounderPic from "../../assets/pic of team/badhon.jpg";
+import userAxiosPublic from "../../Hooks/userAxiosPublic";
 
 const Contact = () => {
+  const axiosPublic = userAxiosPublic();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const message = {
+        senderName: data.name,
+        senderEmail: data.email,
+        subject: data.subject,
+        message: data.message,
+        createdAt: new Date(),
+      };
+
+      const res = await axiosPublic.post("/contact/message", message);
+
+      // MongoDB insertedId check
+      if (res.data.insertedId) {
+        Swal.fire({
+          icon: "success",
+          title: "Message Sent!",
+          text: "Your message has been successfully sent to LearningZone.",
+        });
+        reset(); // reset form
+      } else {
+        throw new Error("Failed to send message.");
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Something went wrong. Please try again later.",
+      });
+    }
+  };
+
   return (
-    <div className="min-h-screen text-white px-6 py-16 ">
+    <div className="min-h-screen text-white px-6 py-16">
       <Helmet>
         <title>Contact | LearningZone</title>
         <meta
@@ -46,7 +91,7 @@ const Contact = () => {
             </h2>
             <p className="mb-3">
               <span className="font-semibold">Address:</span> M.M.C Road,
-              Millpara,Kushtia, Bangladesh
+              Millpara, Kushtia, Bangladesh
             </p>
             <p className="mb-3">
               <span className="font-semibold">Phone:</span> +880 1798 680 543
@@ -73,32 +118,56 @@ const Contact = () => {
             <h2 className="text-2xl font-bold text-cyan-400 mb-6">
               Send a Message
             </h2>
-            <form className="flex flex-col gap-4">
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <input
                 type="text"
                 placeholder="Your Name"
                 className="p-3 rounded border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                {...register("name", { required: true })}
               />
+              {errors.name && (
+                <span className="text-red-500">Name is required</span>
+              )}
+
               <input
                 type="email"
                 placeholder="Your Email"
                 className="p-3 rounded border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                {...register("email", { required: true })}
               />
+              {errors.email && (
+                <span className="text-red-500">Email is required</span>
+              )}
+
               <input
                 type="text"
                 placeholder="Subject"
                 className="p-3 rounded border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                {...register("subject", { required: true })}
               />
+              {errors.subject && (
+                <span className="text-red-500">Subject is required</span>
+              )}
+
               <textarea
                 placeholder="Message"
                 rows="5"
                 className="p-3 rounded border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                {...register("message", { required: true })}
               ></textarea>
+              {errors.message && (
+                <span className="text-red-500">Message is required</span>
+              )}
+
               <button
                 type="submit"
-                className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white font-semibold py-3 rounded-lg hover:from-blue-400 hover:to-cyan-400 shadow-lg transition-all"
+                disabled={isSubmitting}
+                className="bg-gradient-to-r from-cyan-400 to-blue-400 text-white font-semibold py-3 rounded-lg hover:from-blue-400 hover:to-cyan-400 shadow-lg transition-all disabled:opacity-50"
               >
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
@@ -136,7 +205,7 @@ const Contact = () => {
               <div className="w-32 h-32 overflow-hidden rounded-full">
                 <img
                   src={coFounderPic}
-                  alt=" Badhon Sheikh Rijoy Co-Founder"
+                  alt="Badhon Sheikh Rijoy Co-Founder"
                   className="w-32 h-32 rounded-full object-cover mb-4 group-hover:scale-125 duration-500"
                 />
               </div>

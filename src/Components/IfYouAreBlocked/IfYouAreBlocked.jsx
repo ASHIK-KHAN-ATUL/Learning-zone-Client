@@ -58,12 +58,12 @@ const IfYouAreBlocked = () => {
   }, [mainUser, navigate]);
 
   // if (isLoading) return <DataLoading />;
-  if (error)
-    return (
-      <p className="text-center text-red-500 mt-10">
-        Error loading user data. Please refresh the page.
-      </p>
-    );
+  // if (error)
+  //   return (
+  //     <p className="text-center text-red-500 mt-10">
+  //       Error loading user data. Please refresh the page.
+  //     </p>
+  //   );
 
   return <>{/* normal website content here */}</>;
 };

@@ -69,7 +69,7 @@ const ShowRoutine = () => {
 
   return (
     <div className=" max-w-6xl mx-auto p-5 rounded-md bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <h1 className="text-2xl font-bold mb-6">Routine Manager</h1>
+      <h1 className="text-2xl font-bold mb-6">Show All Routine</h1>
 
       {/* Filters + Search */}
       <div className="flex flex-col md:flex-row gap-3 mb-6 items-center">

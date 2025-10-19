@@ -16,6 +16,7 @@ import {
 import useUserRole from "../../Hooks/useUserRole";
 import useAuth from "../../Hooks/useAuth";
 import { Typewriter } from "react-simple-typewriter";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
@@ -164,8 +165,9 @@ const DashboardLayout = () => {
                   }`
                 }
               >
-                <FaCalendarAlt /> Routine Manager
+                <MdCreateNewFolder /> Routine Manager
               </NavLink>
+
               <NavLink
                 to={"/dashboard/showRoutine-admin"}
                 className={({ isActive }) =>
@@ -177,6 +179,19 @@ const DashboardLayout = () => {
                 }
               >
                 <FaCalendarAlt /> Show Routine
+              </NavLink>
+
+              <NavLink
+                to={"/dashboard/seeMessage-admin"}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 py-1 ${
+                    isActive
+                      ? "bg-gray-700 rounded-sm px-3 font-semibold"
+                      : "px-3"
+                  }`
+                }
+              >
+                <FaEnvelope /> See All Messages
               </NavLink>
             </div>
           )}
