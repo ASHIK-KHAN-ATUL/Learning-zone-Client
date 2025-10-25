@@ -1,50 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Home Page -->
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 🏠 Home Page -->
   <url>
     <loc>https://learningzonekst.netlify.app/</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
 
-  <!-- About -->
+  <!-- ℹ️ About Page -->
   <url>
     <loc>https://learningzonekst.netlify.app/about</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
-  <!-- Service -->
+  <!-- 💼 Service Page -->
   <url>
     <loc>https://learningzonekst.netlify.app/service</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
-  <!-- Contact -->
+  <!-- 📞 Contact Page -->
   <url>
     <loc>https://learningzonekst.netlify.app/contact</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
-  <!-- Register -->
-  <url>
-    <loc>https://learningzonekst.netlify.app/register</loc>
-    <priority>0.70</priority>
-  </url>
-
-  <!-- Login -->
-  <url>
-    <loc>https://learningzonekst.netlify.app/login</loc>
-    <priority>0.70</priority>
-  </url>
-
-  <!-- Become Student -->
+  <!-- 🧑‍🎓 Become Student -->
   <url>
     <loc>https://learningzonekst.netlify.app/become-student</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- 👨‍🏫 Become Teacher -->
+  <url>
+    <loc>https://learningzonekst.netlify.app/become-teacher</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- 🔐 Register -->
+  <url>
+    <loc>https://learningzonekst.netlify.app/register</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
-  <!-- Become Teacher -->
+  <!-- 🔑 Login -->
   <url>
-    <loc>https://learningzonekst.netlify.app/become-teacher</loc>
+    <loc>https://learningzonekst.netlify.app/login</loc>
+    <lastmod>2025-10-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
+
 </urlset>
